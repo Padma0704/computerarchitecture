@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MEMORY_SIZE 1000
+struct RAM {
+    int memory[MEMORY_SIZE];
+};
+void initRAM(struct RAM *ram) {
+    for (int i = 0; i < MEMORY_SIZE; ++i) {
+        ram->memory[i] = 0;
+    }
+}
+int readFromMemory(struct RAM *ram, int address) {
+    if (address < 0 || address >= MEMORY_SIZE) {
+        printf("Error: Invalid memory address!\n");
+        return -1;
+    }
+    return ram->memory[address];
+}
+void writeToMemory(struct RAM *ram, int address, int data) {
+    if (address < 0 || address >= MEMORY_SIZE) {
+        printf("Error: Invalid memory address!\n");
+        return;
+    }
+    ram->memory[address] = data;
+}
+int main() {
+    struct RAM ram;
+    initRAM(&ram); 
+    writeToMemory(&ram, 100, 42);
+    writeToMemory(&ram, 200, 123);
+    int data1 = readFromMemory(&ram, 100);
+    int data2 = readFromMemory(&ram, 200);
+
+    printf("Data at address 100: %d\n", data1);
+    printf("Data at address 200: %d\n", data2);
+
+    return 0;
+}
