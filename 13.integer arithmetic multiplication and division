@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int multiplication(int a, int b) {
+    int product = a * b;
+    return product;
+}
+
+int division(int a, int b) {
+    int quotient = a / b;
+    return quotient;
+}
+
+int main() {
+    int num1 = 10;
+    int num2 = 5;
+
+    printf("Multiplication: %d * %d = %d\n", num1, num2, multiplication(num1, num2));
+    printf("Division: %d / %d = %d\n", num1, num2, division(num1, num2));
+
+    return 0;
+}
