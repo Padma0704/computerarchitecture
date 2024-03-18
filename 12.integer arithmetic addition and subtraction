@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int addition(int a, int b) {
+    int sum = a + b;
+    return sum;
+}
+
+int subtraction(int a, int b) {
+    int difference = a - b;
+    return difference;
+}
+
+int main() {
+    int num1 = 10;
+    int num2 = 5;
+
+    printf("Addition: %d + %d = %d\n", num1, num2, addition(num1, num2));
+    printf("Subtraction: %d - %d = %d\n", num1, num2, subtraction(num1, num2));
+
+    return 0;
+}
