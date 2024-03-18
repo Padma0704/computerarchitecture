@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <stdint.h>
+int32_t restoring_division(int32_t dividend, int32_t divisor) {
+    int32_t quotient = 0;
+    int32_t remainder = 0;
+    int32_t mask = 1 << 31;
+    int32_t sign = ((dividend & mask) ^ (divisor & mask)) >> 31;
+    dividend = (dividend ^ mask) - sign;
+    divisor = (divisor ^ mask) - sign;
+    for (int i = 31; i >= 0; i--) {
+        remainder = (remainder << 1) | ((dividend >> i) & 1);
+        if (remainder >= divisor) {
+            remainder -= divisor;
+            quotient |= (1 << i);
+        }
+    }
+    return sign ? -quotient : quotient;
+}
+int main() {
+    int32_t dividend, divisor;
+    dividend = 100;
+    divisor = 7;
+    printf("Dividend: %d, Divisor: %d\n", dividend, divisor);
+    int32_t quotient = restoring_division(dividend, divisor);
+    int32_t remainder = dividend - quotient * divisor;
+    printf("Quotient: %d, Remainder: %d\n", quotient, remainder);
+    return 0;
+}
