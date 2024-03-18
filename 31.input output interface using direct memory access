@@ -1,17 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
-void interruptHandler(int sig) {
-    printf("PCI interrupt received!\n");
+#include <string.h>
+#define MEMORY_SIZE 1024
+#define DEVICE_BUFFER_SIZE 256
+char mainMemory[MEMORY_SIZE];
+char deviceBuffer[DEVICE_BUFFER_SIZE];
+void initMemory() {
+    memset(mainMemory, 0, MEMORY_SIZE);
+}
+void dmaDeviceToMemory(int deviceAddress, int memoryAddress, int size) {
+    memcpy(mainMemory + memoryAddress, deviceBuffer + deviceAddress, size);
+}
+void dmaMemoryToDevice(int memoryAddress, int deviceAddress, int size) {
+    memcpy(deviceBuffer + deviceAddress, mainMemory + memoryAddress, size);
 }
 int main() {
-    if (signal(SIGINT, interruptHandler) == SIG_ERR) {
-        printf("Error installing interrupt handler.\n");
-        return 1;
+    initMemory();
+    for (int i = 0; i < DEVICE_BUFFER_SIZE; ++i) {
+        deviceBuffer[i] = i;
     }
-    printf("Simulating hardware activity...\n");
-    sleep(5); 
-    printf("Program terminated.\n");
+    dmaDeviceToMemory(0, 512, DEVICE_BUFFER_SIZE);
+    dmaMemoryToDevice(512, 0, DEVICE_BUFFER_SIZE);
+    printf("Data in main memory after transfer:\n");
+    for (int i = 512; i < 512 + DEVICE_BUFFER_SIZE; ++i) {
+        printf("%d ", mainMemory[i]);
+    }
+    printf("\n");
+
     return 0;
 }
