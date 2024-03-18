@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+float floating_point_multiplication(float a, float b) {
+    float product = a * b;
+    return product;
+}
+
+float floating_point_division(float a, float b) {
+    float quotient = a / b;
+    return quotient;
+}
+
+int main() {
+    float num1 = 10.5;
+    float num2 = 2.0;
+
+    printf("Multiplication: %.2f * %.2f = %.2f\n", num1, num2, floating_point_multiplication(num1, num2));
+    printf("Division: %.2f / %.2f = %.2f\n", num1, num2, floating_point_division(num1, num2));
+
+    return 0;
+}
