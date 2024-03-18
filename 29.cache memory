@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#define CACHE_SIZE 4
+#define BLOCK_SIZE 4
+#define MAIN_MEMORY_SIZE 16
+typedef struct {
+    int tag;
+    int data[BLOCK_SIZE];
+    bool valid;
+} CacheLine;
+CacheLine cache[CACHE_SIZE];
+int mainMemory[MAIN_MEMORY_SIZE];
+void initCache() {
+    for (int i = 0; i < CACHE_SIZE; ++i) {
+        cache[i].valid = false; 
+    }
+}
+int readFromCache(int address) {
+    int blockNumber = address / BLOCK_SIZE;
+    int offset = address % BLOCK_SIZE;
+    int tag = blockNumber;
+    int cacheIndex = blockNumber % CACHE_SIZE;
+    if (cache[cacheIndex].valid && cache[cacheIndex].tag == tag) {
+        printf("Cache hit!\n");
+        return cache[cacheIndex].data[offset];
+    } else {
+        printf("Cache miss!\n");
+        int startAddress = blockNumber * BLOCK_SIZE;
+        cache[cacheIndex].tag = tag;
+        cache[cacheIndex].valid = true;
+        for (int i = 0; i < BLOCK_SIZE; ++i) {
+            cache[cacheIndex].data[i] = mainMemory[startAddress + i];
+        }
+        return cache[cacheIndex].data[offset];
+    }
+}
+void writeToCache(int address, int value) {
+    int blockNumber = address / BLOCK_SIZE;
+    int offset = address % BLOCK_SIZE;
+    int tag = blockNumber;
+    int cacheIndex = blockNumber % CACHE_SIZE;
+    cache[cacheIndex].tag = tag;
+    cache[cacheIndex].valid = true;
+    cache[cacheIndex].data[offset] = value;
+}
+int main() {
+    initCache();
+    for (int i = 0; i < MAIN_MEMORY_SIZE; ++i) {
+        mainMemory[i] = i;
+    }
+   printf("Reading data from cache:\n");
+    for (int i = 0; i < MAIN_MEMORY_SIZE; ++i) {
+        int data = readFromCache(i);
+        printf("Data at address %d: %d\n", i, data);
+    }
+    writeToCache(0, 100); 
+    writeToCache(5, 200); 
+    printf("\nReading data from cache after writing:\n");
+    for (int i = 0; i < MAIN_MEMORY_SIZE; ++i) {
+        int data = readFromCache(i);
+        printf("Data at address %d: %d\n", i, data);
+    }
+    return 0;
+}
