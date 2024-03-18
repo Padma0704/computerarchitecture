@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdint.h>
+int booth_multiplication(int multiplicand, int multiplier) {
+    int product = 0;
+    int accumulator = 0;
+    int multiplier_bit = 0;
+    int num_bits = 32;
+       for (int i = 0; i < num_bits; i++) {
+        multiplier_bit = multiplier & 1;
+        if (multiplier_bit == 1) {
+            accumulator += multiplicand;
+        }
+        if ((accumulator & 3) == 1) {
+            accumulator -= multiplicand;
+        }
+        else if ((accumulator & 3) == 2) {
+            accumulator += multiplicand;
+        }
+        multiplier >>= 1;
+        accumulator >>= 1;
+    }
+    product = accumulator;
+    return product;
+}
+int main() {
+    int multiplicand = 11;
+    int multiplier = 7;    
+    int product = booth_multiplication(multiplicand, multiplier);
+    printf("Multiplication of %d and %d is: %d\n", multiplicand, multiplier, product);
+    return 0;
+}
