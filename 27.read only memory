@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define ROM_SIZE 1000
+struct ROM {
+    int memory[ROM_SIZE];
+};
+void initROM(struct ROM *rom, const int *data, int size) {
+    if (size > ROM_SIZE) {
+        printf("Error: Data size exceeds ROM size!\n");
+        return;
+    }
+    for (int i = 0; i < size; ++i) {
+        rom->memory[i] = data[i];
+    }
+}
+int readFromROM(const struct ROM *rom, int address) {
+    if (address < 0 || address >= ROM_SIZE) {
+        printf("Error: Invalid ROM address!\n");
+        return -1;
+    }
+    return rom->memory[address];
+}
+int main() {
+    int data[] = {10, 20, 30, 40, 50}; 
+    int dataSize = sizeof(data) / sizeof(data[0]);
+    struct ROM rom;
+    initROM(&rom, data, dataSize); 
+    for (int i = 0; i < dataSize; ++i) {
+        int value = readFromROM(&rom, i);
+        printf("Data at address %d: %d\n", i, value);
+    }
+    return 0;
+}
