@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
+void interruptHandler(int sig) {
+    printf("PCI interrupt received!\n");
+}
+int main() {
+    if (signal(SIGINT, interruptHandler) == SIG_ERR) {
+        printf("Error installing interrupt handler.\n");
+        return 1;
+    }
+    printf("Simulating hardware activity...\n");
+    sleep(5); 
+    printf("Program terminated.\n");
+    return 0;
+}
