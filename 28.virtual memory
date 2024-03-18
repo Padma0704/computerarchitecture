@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define PAGE_SIZE 1024
+#define NUM_PAGES 256
+#define FRAME_SIZE 1024
+#define NUM_FRAMES 256
+typedef struct {
+    int frameNumber;
+    int valid;
+} PTE;
+PTE pageTable[NUM_PAGES];
+char physicalMemory[NUM_FRAMES][FRAME_SIZE];
+void initPageTable() {
+    for (int i = 0; i < NUM_PAGES; ++i) {
+        pageTable[i].valid = 0; 
+    }
+}
+int allocatePage(char data[]) {
+    for (int i = 0; i < NUM_PAGES; ++i) {
+        if (!pageTable[i].valid) {
+            pageTable[i].valid = 1;
+            pageTable[i].frameNumber = rand() % NUM_FRAMES; 
+            for (int j = 0; j < PAGE_SIZE; ++j) {
+                physicalMemory[pageTable[i].frameNumber][j] = data[j];
+            }
+            return i; 
+        }
+    }
+    printf("Error: No free pages available!\n");
+    return -1;
+}
+char readFromVirtualMemory(int pageNumber, int offset) {
+    if (pageNumber < 0 || pageNumber >= NUM_PAGES || !pageTable[pageNumber].valid) {
+        printf("Error: Invalid virtual memory address!\n");
+        return '\0';
+    }
+    int frameNumber = pageTable[pageNumber].frameNumber;
+    return physicalMemory[frameNumber][offset];
+}
+int main() {
+    initPageTable();
+    char data[PAGE_SIZE];
+    for (int i = 0; i < PAGE_SIZE; ++i) {
+        data[i] = 'A' + i % 26; 
+    }
+    int pageNumber = allocatePage(data);
+    if (pageNumber != -1) {
+        for (int i = 0; i < PAGE_SIZE; ++i) {
+            printf("%c", readFromVirtualMemory(pageNumber, i));
+        }
+        printf("\n");
+    }
+    return 0;
+}
