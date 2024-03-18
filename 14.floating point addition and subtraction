@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+float floating_point_addition(float a, float b) {
+    float sum = a + b;
+    return sum;
+}
+
+float floating_point_subtraction(float a, float b) {
+    float difference = a - b;
+    return difference;
+}
+
+int main() {
+    float num1 = 10.5;
+    float num2 = 5.5;
+
+    printf("Addition: %.2f + %.2f = %.2f\n", num1, num2, floating_point_addition(num1, num2));
+    printf("Subtraction: %.2f - %.2f = %.2f\n", num1, num2, floating_point_subtraction(num1, num2));
+
+    return 0;
+}
