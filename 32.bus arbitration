@@ -1,0 +1,42 @@
+#include <stdio.h>
+#define NUM_DEVICES 3
+#define BUS_ACCESS_TIME 5
+typedef struct {
+    int id;
+    int accessTime;
+    int remainingTime;
+} IODevice;
+void roundRobinArbitration(IODevice devices[], int numDevices) {
+    int currentDeviceIndex = 0;
+    printf("Bus arbitration using Round-Robin method:\n");
+    while (1) {
+        IODevice *currentDevice = &devices[currentDeviceIndex];
+        if (currentDevice->remainingTime > 0) {
+            printf("Device %d accessing the bus for %d units of time\n", currentDevice->id, BUS_ACCESS_TIME);
+            currentDevice->remainingTime -= BUS_ACCESS_TIME;
+            currentDeviceIndex = (currentDeviceIndex + 1) % numDevices;
+        } else {
+            int allDevicesComplete = 1;
+            for (int i = 0; i < numDevices; ++i) {
+                if (devices[i].remainingTime > 0) {
+                    allDevicesComplete = 0;
+                    break;
+                }
+            }
+            if (allDevicesComplete) {
+                break;
+            }
+            currentDeviceIndex = (currentDeviceIndex + 1) % numDevices;
+        }
+    }
+    printf("Bus arbitration completed.\n");
+}
+int main() {
+    IODevice devices[NUM_DEVICES] = {
+        {1, 10, 10},  
+        {2, 15, 15},  
+        {3, 20, 20}   
+    };
+    roundRobinArbitration(devices, NUM_DEVICES);
+    return 0;
+}
