@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <time.h>
+void perform_computation() {
+    int sum = 0;
+    for (int i = 0; i < 100000000; i++) {
+        sum += i;
+    }
+}
+int main() {
+    clock_t start_time = clock();
+    perform_computation();
+    clock_t end_time = clock();
+    double cpu_time_taken = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
+    printf("CPU time taken: %.2f seconds\n", cpu_time_taken);
+    return 0;
+}
