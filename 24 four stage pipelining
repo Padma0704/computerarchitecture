@@ -1,0 +1,40 @@
+#include <stdio.h>
+#define NUM_INSTRUCTIONS 8
+int instruction_memory[NUM_INSTRUCTIONS] = {1, 2, 3, 4, 5, 6, 7, 0}; // Example instructions: ADD, SUB, MUL, DIV, NOP
+void fetch(int pc, int *instruction) {
+    *instruction = instruction_memory[pc];
+}
+void decode(int instruction, int *opcode) {
+    *opcode = instruction;
+}
+void execute(int opcode) {
+    switch (opcode) {
+        case 1: 
+            printf("Executing ADD instruction\n");
+            break;
+        case 2: 
+            printf("Executing SUB instruction\n");
+            break;
+        case 3: 
+            printf("Executing MUL instruction\n");
+            break;
+        case 4: 
+            printf("Executing DIV instruction\n");
+            break;
+        default:
+            printf("NOP instruction\n");
+            break;
+    }
+}
+int main() {
+    int pc = 0;
+    int instruction;
+    int opcode;
+    while (instruction_memory[pc] != 0) {
+        fetch(pc, &instruction);
+        decode(instruction, &opcode);
+        execute(opcode);
+        pc++;
+    }
+    return 0;
+}
