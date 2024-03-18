@@ -1,0 +1,33 @@
+#include <stdio.h>
+void fetch(int *instruction_memory, int pc, int *instruction) {
+    *instruction = instruction_memory[pc];
+}
+void execute(int instruction, int *pc) {
+    switch (instruction) {
+        case 0: 
+            break;
+        case 1: 
+            printf("Executing ADD instruction\n");
+            break;
+        case 2: 
+            printf("Executing SUB instruction\n");
+            break;
+        case 3: 
+            printf("Executing MUL instruction\n");
+            break;
+        default:
+            printf("Unknown instruction\n");
+            break;
+    }
+    (*pc)++;
+}
+int main() {
+    int instruction_memory[] = {1, 2, 3, 0}; 
+    int pc = 0;
+    int instruction;
+    while (instruction_memory[pc] != 0) { 
+        fetch(instruction_memory, pc, &instruction);
+        execute(instruction, &pc);
+    }
+    return 0;
+}
